@@ -93,9 +93,21 @@
       }
     }
 
+    .counter {
+      margin-top: 20px;
+      font-size: 1.1rem;
+      color: #5b2d00;
+      font-weight: bold;
+      font-family: 'Open Sans', sans-serif;
+      animation: fadeIn 4s ease-in forwards 4s;
+    }
+
     @media (min-width: 600px) {
       .message {
         font-size: 2rem;
+      }
+      .counter {
+        font-size: 1.3rem;
       }
     }
   </style>
@@ -111,20 +123,73 @@
     My Love, My Iris, My MiLo.
   </div>
 
+  <div class="counter" id="anniversary-counter">
+    <!-- Countdown will appear here -->
+  </div>
+
   <script>
-    const sunflower = document.querySelector('.sunflower');
+  const sunflower = document.querySelector('.sunflower');
 
-    for (let i = 0; i < 12; i++) {
-      const wrapper = document.createElement('div');
-      wrapper.classList.add('petal-wrapper');
-      wrapper.style.transform = `rotate(${i * 30}deg)`;
+  for (let i = 0; i < 12; i++) {
+    const wrapper = document.createElement('div');
+    wrapper.classList.add('petal-wrapper');
+    wrapper.style.transform = `rotate(${i * 30}deg)`;
 
-      const petal = document.createElement('div');
-      petal.classList.add('petal');
+    const petal = document.createElement('div');
+    petal.classList.add('petal');
 
-      wrapper.appendChild(petal);
-      sunflower.appendChild(wrapper);
+    wrapper.appendChild(petal);
+    sunflower.appendChild(wrapper);
+  }
+
+  function updateCounter() {
+    const start = new Date("May 28, 2025 00:00:00");
+    const now = new Date();
+
+    if (now < start) {
+      document.getElementById("anniversary-counter").innerText = 
+        "We will be together starting May 28, 2025 💛";
+      return;
     }
-  </script>
+
+    let years = now.getFullYear() - start.getFullYear();
+    let months = now.getMonth() - start.getMonth();
+    let days = now.getDate() - start.getDate();
+    let hours = now.getHours() - start.getHours();
+    let minutes = now.getMinutes() - start.getMinutes();
+    let seconds = now.getSeconds() - start.getSeconds();
+
+    if (seconds < 0) {
+      seconds += 60;
+      minutes--;
+    }
+    if (minutes < 0) {
+      minutes += 60;
+      hours--;
+    }
+    if (hours < 0) {
+      hours += 24;
+      days--;
+    }
+    if (days < 0) {
+      const prevMonth = new Date(now.getFullYear(), now.getMonth(), 0).getDate();
+      days += prevMonth;
+      months--;
+    }
+    if (months < 0) {
+      months += 12;
+      years--;
+    }
+
+    document.getElementById("anniversary-counter").innerText =
+      `Together for ${years} years, ${months} months, ${days} days, ` +
+      `${String(hours).padStart(2, '0')} hours, ` +
+      `${String(minutes).padStart(2, '0')} minutes, ` +
+      `${String(seconds).padStart(2, '0')} seconds 💖`;
+  }
+
+  updateCounter();
+  setInterval(updateCounter, 1000);
+</script>
 </body>
 </html>
